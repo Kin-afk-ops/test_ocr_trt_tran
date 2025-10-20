@@ -105,7 +105,7 @@ def test_trt():
  
 
      # --- Bước 3: Chạy run.py trong repo ---
-    run_py = "/workspace/test_ocr_trt_tran/trt_ocr_demo.py"
+    run_py = "/workspace/test_ocr_trt_tran/trt_test_encoder.py"
     if os.path.exists(run_py):
         print(f"▶️ Running {run_py} ...")
         result = subprocess.run(
@@ -117,7 +117,7 @@ def test_trt():
         print(result.stdout)
         print(result.stderr)
         if result.returncode != 0:
-            raise RuntimeError(f"❌ /workspace/test_ocr_trt_tran/trt_ocr_demo.py failed with code {result.returncode}")
+            raise RuntimeError(f"❌ /workspace/test_ocr_trt_tran/trt_test_encoder.py failed with code {result.returncode}")
     else:
         raise FileNotFoundError(f"❌ {run_py} not found in repo.")
 

@@ -34,18 +34,34 @@ config['device'] = 'cuda:0'
 trainer = Predictor(config)
 
 sample_inp = np.array(np.random.rand(6, 3, 32, 160), dtype = np.double)
+import requests
 
-trt_model = TrtOCREncoder('transformer_encoder.trt')
+
+encoder_path = "/tmp/transformer_encoder.trt"
+print(f"Downloading ONNX model from https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt")
+r = requests.get("https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt")
+with open(encoder_path, "wb") as f:
+    f.write(r.content)
+print(f"✅ Saved ONNX to /tmp/transformer_encoder.trt")
+
+
+
+
+trt_model = TrtOCREncoder(encoder_path)
 torch_model = TorchEncoder(trainer.model)
 torch_model.eval()
-onnx_model = rt.InferenceSession('transformer_encoder.onnx')
+
+
+
+
+# onnx_model = rt.InferenceSession('transformer_encoder.onnx')
 
 trt_out = np.squeeze(trt_model.run(sample_inp.copy().astype('float32')))
 with torch.no_grad():
     torch_out = np.squeeze(torch_model(torch.Tensor(sample_inp.copy())).detach().cpu().numpy())
 
-onnx_inp = {onnx_model.get_inputs()[0].name: sample_inp.copy().astype('float32')} 
-onnx_out = np.squeeze(onnx_model.run(None, onnx_inp))
+# onnx_inp = {onnx_model.get_inputs()[0].name: sample_inp.copy().astype('float32')} 
+# onnx_out = np.squeeze(onnx_model.run(None, onnx_inp))
 print(torch_out[10: 20, 0, 0])
-print(onnx_out[10: 20, 0, 0])
+# print(onnx_out[10: 20, 0, 0])
 print(trt_out[10: 20, 0, 0])
