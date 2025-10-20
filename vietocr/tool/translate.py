@@ -128,40 +128,55 @@ def translate_trt(img, encoder_model, decoder_model, max_seq_length=128, sos_tok
     char_probs = [[1]*len(img)]
 
     max_length = 0
-    # print(memory.shape)
-    # print(np.any(np.asarray(translated_sentence).T==eos_token, axis=1))
 
     while max_length <= max_seq_length and not all(np.any(np.asarray(translated_sentence).T==eos_token, axis=1)):
-        # print(np.asarray(translated_sentence))
         tgt_inp = np.array(translated_sentence).astype('long')
 
         values, indices = decoder_model.run(tgt_inp, memory)
 
+        print(f"[DEBUG Step {max_length}]")
+        print(f"  indices shape: {indices.shape}")
+        print(f"  indices[:, -1, :]: {indices[:, -1, :]}")
+        print(f"  indices[:, -1, 0]: {indices[:, -1, 0]}")
 
         indices = indices[:, -1, 0]
         indices = indices.tolist()
         
         values = values[:, -1, 0]
         values = values.tolist()
-        # print(values)
-        # print(translated_sentence)
+        
+        print(f"  indices after tolist: {indices}")
+        print(f"  values after tolist: {values}")
+
         char_probs.append(values)
-        # print(values, indices)
         translated_sentence.append(indices)   
         max_length += 1
+        
+        # Safety break if we're getting repeated invalid values
+        if max_length > 5:
+            print("\n⚠️ WARNING: Model may not be working correctly. Stopping early.")
+            break
 
     # Process for each sentence
     translated_sentence = np.asarray(translated_sentence).T
     char_probs = np.asarray(char_probs).T
-    # char_probs = np.multiply(char_probs, translated_sentence > 3)
-    # char_probs = np.sum(char_probs, axis=-1)/(char_probs>0).sum(-1)
+    
+    print(f"\n[FINAL] translated_sentence shape: {translated_sentence.shape}")
+    print(f"[FINAL] translated_sentence:\n{translated_sentence}")
+    print(f"[FINAL] char_probs shape: {char_probs.shape}")
+    
     line_probs = []
     for i in range(len(img)):
-        eos_index = np.where(translated_sentence[i] == eos_token)[0][0]
-        line_probs.append(np.mean(char_probs[i][:eos_index]))
-    print(line_probs)    
+        eos_indices = np.where(translated_sentence[i] == eos_token)[0]
+        if len(eos_indices) == 0:
+            print(f"⚠️ No EOS token found in sentence {i}. Using full length.")
+            line_probs.append(np.mean(char_probs[i]))
+        else:
+            eos_index = eos_indices[0]
+            line_probs.append(np.mean(char_probs[i][:eos_index]))
+    
+    print(f"[FINAL] line_probs: {line_probs}")    
     return translated_sentence, line_probs
-
 def build_model(config):
     vocab = Vocab(config['vocab'])
     device = config['device']
