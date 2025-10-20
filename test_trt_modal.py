@@ -6,8 +6,10 @@ app = modal.App("onnx-to-tensorRT-app")
 
 
 Image = (
-    #  modal.Image.from_registry(f"nvidia/cuda:{tag}", add_python="3.10")
-    modal.Image.from_registry("nvcr.io/nvidia/tensorrt:21.03-py3")
+    # modal.Image.debian_slim(python_version="3.10")
+    modal.Image.from_registry("nvcr.io/nvidia/tensorrt:24.06-py3")
+    # modal.Image.from_registry("nvcr.io/nvidia/tensorrt:21.12-py3")
+    
     .apt_install(
         "git",
         "libglib2.0-0",
@@ -19,8 +21,6 @@ Image = (
     )
     .pip_install(
         "fastapi==0.85.0",
-        "torch",
-        "torchvision",  
         "onnx",
         "onnxruntime-gpu==1.12.1",
         "onnxsim==0.4.8",
@@ -30,10 +30,10 @@ Image = (
         "requests",
         "logzero",
         "pillow",
-        "numpy==1.24.4"
+        "numpy==1.24.4",
         "pyyaml",
         "torch==1.11.0",
-        "torchvision==0.12.0"
+        "torchvision==0.12.0",
         "gdown",
         "einops"
 

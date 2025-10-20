@@ -35,7 +35,7 @@ def allocate_buffers(engine):
     # max_batch_size = 1
     # print(max_batch_size)
     for binding in engine:
-        binding_shape = engine.get_binding_shape(binding)
+        binding_shape = engine.get_tensor_shape(binding)
         # print(binding_shape)
         #Fix -1 dimension for proper memory allocation for batch_size > 1
         if engine.binding_is_input(binding):
@@ -97,11 +97,11 @@ def allocate_buffers(engine):
         # Append to the appropriate list.
         if engine.binding_is_input(binding):
             inputs.append(HostDeviceMem(host_mem, device_mem))
-            input_shapes.append(engine.get_binding_shape(binding))
+            input_shapes.append(engine.get_tensor_shape(binding))
         else:
             outputs.append(HostDeviceMem(host_mem, device_mem))
             #Collect original output shapes and names from engine
-            out_shapes.append(engine.get_binding_shape(binding))
+            out_shapes.append(engine.get_tensor_shape(binding))
             out_names.append(binding)
     return inputs, outputs, bindings, stream, input_shapes, out_shapes, out_names, max_batch_size
 
