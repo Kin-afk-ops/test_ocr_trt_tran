@@ -1,0 +1,8 @@
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx.data
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.onnx
+
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/tran_config_14_10_2025.yml
+
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.trt

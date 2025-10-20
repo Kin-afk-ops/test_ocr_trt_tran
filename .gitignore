@@ -1,0 +1,30 @@
+transformer_encoder.trt
+transformer_decoder.onnx
+transformer_encoder.onnx
+transformer_encoder.onnx.data
+transformer_decoder.trt
+
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+.env
+venv/
+
+# Model / Engine / ONNX
+*.trt
+*.onnx
+*.onnx.data
+*.pth
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
