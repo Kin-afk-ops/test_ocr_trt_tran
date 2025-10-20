@@ -162,7 +162,8 @@ class TrtOCREncoder(TrtModel):
         # print('allocate_place', input.shape)
         self.inputs[0].host[:allocate_place] = input.flatten(order='C').astype(np.float32)
         # print('Set binding to {}'.format(input.shape))
-        self.context.set_binding_shape(0, input.shape)
+        tensor_name = self.engine.get_tensor_name(0)
+        self.context.set_input_shape(tensor_name, input.shape)
         feats = do_inference(
             self.context, bindings=self.bindings,
             inputs=self.inputs, outputs=self.outputs, stream=self.stream)
