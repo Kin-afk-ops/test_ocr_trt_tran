@@ -157,7 +157,13 @@ class TrtOCREncoder(TrtModel):
         input = np.asarray(input)
         batch_size = input.shape[0]
         feat_width = int(input.shape[-1]/4)
+        
+
+        
         out_shape = (feat_width*2, batch_size, 256)
+
+
+        
         allocate_place = np.prod(input.shape)
         # print('allocate_place', input.shape)
         self.inputs[0].host[:allocate_place] = input.flatten(order='C').astype(np.float32)
@@ -182,6 +188,22 @@ class TrtOCRDecoder(TrtModel):
         memory = np.asarray(memory)
  
         shape0, batch_size = tgt_inp.shape # Sequence length & batch size
+
+
+        # Valid range: [1,1]..[128,32]
+        max_seq_len = 128
+        max_batch = 32
+        
+        if shape0 > max_seq_len:
+            print(f"⚠️  Warning: Sequence length {shape0} exceeds max {max_seq_len}, truncating")
+            tgt_inp = tgt_inp[:max_seq_len, :]
+            shape0 = max_seq_len
+            
+        if batch_size > max_batch:
+            print(f"⚠️  Warning: Batch size {batch_size} exceeds max {max_batch}, truncating")
+            tgt_inp = tgt_inp[:, :max_batch]
+            memory = memory[:, :max_batch, :]
+            batch_size = max_batch
 
         # print(tgt_inp.shape, memory.shape)
         allocate_place_tgt_inp = np.prod(tgt_inp.shape)
