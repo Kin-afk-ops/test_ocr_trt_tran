@@ -38,7 +38,7 @@ def allocate_buffers(engine):
         binding_shape = engine.get_tensor_shape(binding)
         # print(binding_shape)
         #Fix -1 dimension for proper memory allocation for batch_size > 1
-        if engine.binding_is_input(binding):
+        if engine.get_tensor_mode(binding) == trt.TensorIOMode.INPUT:
             # Input Encoder
             if binding == 'input':
                 if binding_shape[0] == -1:
@@ -95,7 +95,7 @@ def allocate_buffers(engine):
         # Append the device buffer to device bindings.
         bindings.append(int(device_mem))
         # Append to the appropriate list.
-        if engine.binding_is_input(binding):
+        if engine.get_tensor_mode(binding) == trt.TensorIOMode.INPUT:
             inputs.append(HostDeviceMem(host_mem, device_mem))
             input_shapes.append(engine.get_tensor_shape(binding))
         else:
