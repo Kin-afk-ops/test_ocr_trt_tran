@@ -7,7 +7,7 @@ app = modal.App("onnx-to-tensorRT-app")
 
 Image = (
     #  modal.Image.from_registry(f"nvidia/cuda:{tag}", add_python="3.10")
-    modal.Image.from_registry("nvcr.io/nvidia/tensorrt:24.06-py3")
+    modal.Image.from_registry("nvcr.io/nvidia/tensorrt:21.03-py3")
     .apt_install(
         "git",
         "libglib2.0-0",
@@ -29,6 +29,13 @@ Image = (
         "packaging",   
         "requests",
         "logzero",
+        "pillow",
+        "numpy==1.24.4"
+        "pyyaml",
+        "torch==1.11.0",
+        "torchvision==0.12.0"
+        "gdown",
+        "einops"
 
     )
 )
