@@ -47,7 +47,7 @@ def allocate_buffers(engine):
                     binding_shape = binding_shape[:-1] + (768,) 
                 print(binding, binding_shape, max_batch_size)
                 size = trt.volume(binding_shape) * max_batch_size
-                dtype = trt.nptype(engine.get_binding_dtype(binding))
+                dtype = trt.nptype(engine.get_tensor_dtype(binding))
             # Input Decoder
             elif binding == 'tgt_inp':
                 if binding_shape[0] == -1:
@@ -56,7 +56,7 @@ def allocate_buffers(engine):
                     binding_shape = binding_shape[:-1] + (1,) 
                 # print(binding, binding_shape, 128, max_batch_size)
                 size = trt.volume(binding_shape) * 128 * max_batch_size# Max sequence length
-                dtype = trt.nptype(engine.get_binding_dtype(binding))
+                dtype = trt.nptype(engine.get_tensor_dtype(binding))
             elif binding == 'memory':
                 if binding_shape[0] == -1:
                     binding_shape = (1,) + binding_shape[1:]
@@ -64,7 +64,7 @@ def allocate_buffers(engine):
                     binding_shape = binding_shape[:1] + (1,) + binding_shape[2:]
                 # print(binding, binding_shape, 384, max_batch_size)
                 size = trt.volume(binding_shape) * 384 * max_batch_size # Max features length * end_feature_size = 768/4 * 2
-                dtype = trt.nptype(engine.get_binding_dtype(binding))
+                dtype = trt.nptype(engine.get_tensor_dtype(binding))
             else:
                 raise ValueError("Allocate failed for binding: {}, not implemented".format(binding))
         else:
@@ -76,7 +76,7 @@ def allocate_buffers(engine):
                     binding_shape = binding_shape[:1] + (1,) + binding_shape[2:] # Batch size
                 # print(binding, binding_shape, max_batch_size)
                 size = trt.volume(binding_shape) * max_batch_size
-                dtype = trt.nptype(engine.get_binding_dtype(binding))
+                dtype = trt.nptype(engine.get_tensor_dtype(binding))
             # Output Decoder
             elif binding == 'values' or binding == 'indices':
                 if binding_shape[0] == -1:
@@ -85,7 +85,7 @@ def allocate_buffers(engine):
                     binding_shape = binding_shape[:1] + (1,) + binding_shape[2:] # feature_width
                 # print(binding, binding_shape, 128, max_batch_size)
                 size = trt.volume(binding_shape) * 128 * max_batch_size # Max sequence length * max_batch_size
-                dtype = trt.nptype(engine.get_binding_dtype(binding))    
+                dtype = trt.nptype(engine.get_tensor_dtype(binding))
             else:
                 raise ValueError("Allocate failed for binding: {}, not implemented".format(binding))
         # print(size, dtype)
