@@ -115,7 +115,7 @@ def test_trt():
         print(result.stdout)
         print(result.stderr)
         if result.returncode != 0:
-            raise RuntimeError(f"❌ run.py failed with code {result.returncode}")
+            raise RuntimeError(f"❌ /workspace/test_ocr_trt_tran/trt_ocr_demo.pyfailed with code {result.returncode}")
     else:
         raise FileNotFoundError(f"❌ {run_py} not found in repo.")
 
