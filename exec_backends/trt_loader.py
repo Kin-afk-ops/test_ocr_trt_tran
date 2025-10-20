@@ -190,7 +190,8 @@ class TrtOCRDecoder(TrtModel):
         self.inputs[0].host[:allocate_place_tgt_inp] = tgt_inp.flatten(order='C').astype(np.float32)
         self.inputs[1].host[:allocate_place_memory] = memory.flatten(order='C').astype(np.float32)
         # print('Set binding to {}'.format(input.shape))
-        self.context.set_binding_shape(0, tgt_inp.shape)
+        tensor_name = self.engine.get_tensor_name(0)
+        self.context.set_input_shape(tensor_name, tgt_inp.shape)
         self.context.set_binding_shape(1, memory.shape)
 
         out_shape = (batch_size, shape0, 5)
