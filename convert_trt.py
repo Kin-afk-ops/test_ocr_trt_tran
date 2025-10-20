@@ -54,7 +54,7 @@ def convert_onnx_to_engine(onnx_url: str, onnx_data_url, output_engine_name: str
     print("CUDA available:", torch.cuda.is_available())
 
     # Download ONNX
-    onnx_path = "/tmp/transformer_decoder.onnx"
+    onnx_path = "/tmp/transformer_encoder.onnx"
     print(f"Downloading ONNX from {onnx_url}")
     r = requests.get(onnx_url)
     with open(onnx_path, "wb") as f:
@@ -79,9 +79,9 @@ def convert_onnx_to_engine(onnx_url: str, onnx_data_url, output_engine_name: str
         f"--saveEngine={engine_path}",
         # Optimization profiles for decoder
         # Format: tensor_name:min_shape,opt_shape,max_shape
-        "--minShapes=tgt_inp:1x1,memory:64x1x256",
-        "--optShapes=tgt_inp:64x32,memory:256x32x256",
-        "--maxShapes=tgt_inp:128x32,memory:384x32x256",
+        "--minShapes=input:1x3x32x128",
+        "--optShapes=input:32x3x32x512",
+        "--maxShapes=input:32x3x32x768",
         "--verbose",
         "--fp16",
     ]
@@ -113,16 +113,16 @@ def main():
 
     filename = os.path.basename("https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/transformer_decoder.onnx")
     engine_name = filename.replace(".onnx", ".trt")
-    # engine_bytes = convert_onnx_to_engine.remote(
-    #     "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx", 
-    #     "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx.data",
-    #     engine_name)
-    
-
     engine_bytes = convert_onnx_to_engine.remote(
-        "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.onnx", 
+        "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx", 
         "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx.data",
         engine_name)
+    
+
+    # engine_bytes = convert_onnx_to_engine.remote(
+    #     "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.onnx", 
+    #     "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.onnx.data",
+    #     engine_name)
 
     local_path = f"./{engine_name}"
     with open(local_path, "wb") as f:

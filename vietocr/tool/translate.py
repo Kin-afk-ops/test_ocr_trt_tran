@@ -131,6 +131,11 @@ def translate_trt(img, encoder_model, decoder_model, max_seq_length=128, sos_tok
 
     max_length = 0
 
+
+    print(f"Number of decoder inputs: {len(decoder_model.inputs)}")
+    for i, inp in enumerate(decoder_model.inputs):
+        print(f"Input {i}: name={inp.name}, shape={inp.shape}")
+
     while max_length <= max_seq_length and not all(np.any(np.asarray(translated_sentence).T==eos_token, axis=1)):
         tgt_inp = np.array(translated_sentence).astype('long')
 

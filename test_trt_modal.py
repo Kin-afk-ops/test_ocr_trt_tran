@@ -103,11 +103,6 @@ def test_trt():
 
    
  
-    # --- Bước 3: Cài đặt các package từ requirements.txt ---
-
-    # cmd_install = f"{sys.executable} -m pip install -r /workspace/test_ocr_trt_tran/requirements.txt"
-    # subprocess.run(cmd_install, shell=True, check=True)
-
 
      # --- Bước 3: Chạy run.py trong repo ---
     run_py = "/workspace/test_ocr_trt_tran/trt_ocr_demo.py"
@@ -122,7 +117,7 @@ def test_trt():
         print(result.stdout)
         print(result.stderr)
         if result.returncode != 0:
-            raise RuntimeError(f"❌ /workspace/test_ocr_trt_tran/trt_ocr_demo.pyfailed with code {result.returncode}")
+            raise RuntimeError(f"❌ /workspace/test_ocr_trt_tran/trt_ocr_demo.py failed with code {result.returncode}")
     else:
         raise FileNotFoundError(f"❌ {run_py} not found in repo.")
 
