@@ -3,6 +3,7 @@ transformer_decoder.onnx
 transformer_encoder.onnx
 transformer_encoder.onnx.data
 transformer_decoder.trt
+test_trt_modal.py
 
 
 # Python

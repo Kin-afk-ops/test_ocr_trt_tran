@@ -6,3 +6,5 @@ https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/tran_c
 
 https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt
 https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.trt
+
+https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformerocr_14_10_2025_final.pth

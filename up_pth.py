@@ -26,7 +26,7 @@ def upload_to_r2(local_path, r2_key):
 # Upload file .pth:
 if __name__ == "__main__":
     # local_file = r"D:\code\thuc_tap_2025\teknix\15_10_2025\modal_ocr\weight\seq\decoder.onnx"
-    local_file = r"D:\code\thuc_tap_2025\teknix\20_10_2025\transformer_decoder.trt"
+    local_file = r"D:\code\thuc_tap_2025\teknix\14_10_2025\tran_train\transformerocr_14_10_2025_final.pth"
     # local_file = r"D:\code\thuc_tap_2025\teknix\14_10_2025\seq_train\config_seq_14_10_2025.yml"
-    r2_object_key = "models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.trt"
+    r2_object_key = "models/vietocr/modal_ocr/onnx/tran/new/transformerocr_14_10_2025_final.pth"
     upload_to_r2(local_file, r2_object_key)

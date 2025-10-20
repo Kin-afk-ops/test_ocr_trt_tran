@@ -90,34 +90,39 @@ class TrtOCR(object):
 
 
 if __name__ == '__main__':
-    config = Cfg.load_config_from_file(r"D:\code\thuc_tap_2025\teknix\20_10_2025\tran_config_14_10_2025.yml")
-    dataset_params = {
-        'name':'hw',
-        'data_root':'./my_data/',
-        'train_annotation':'train_line_annotation.txt',
-        'valid_annotation':'test_line_annotation.txt'
-    }
-
-    params = {
-             'print_every':200,
-             'valid_every':15*200,
-              'iters':20000,
-              'checkpoint':'./checkpoint/transformerocr_checkpoint.pth',    
-              'export':'./weights/transformerocr.pth',
-              'metrics': 10000
-             }
-
-    config['trainer'].update(params)
-    config['dataset'].update(dataset_params)
+    import requests
+    config = Cfg.load_config_from_file("./tran_config_14_10_2025.yml")
+    
+    
     config['device'] = 'cuda:0'
-    config['weights'] = r"D:\code\thuc_tap_2025\teknix\20_10_2025\transformerocr_14_10_2025_final.pth"
+    config['weights'] = "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformerocr_14_10_2025_final.pth"
   
 
     img1 = Image.open('image/test.png')
     img2 = Image.open('image/test_2.png')
     img3 = Image.open('image/test_3.png')
+
+    encoder_path = "/tmp/transformer_encoder.trt"
+    print(f"Downloading ONNX model from https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt")
+    r = requests.get("https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_encoder.trt")
+    with open(encoder_path, "wb") as f:
+        f.write(r.content)
+    print(f"✅ Saved ONNX to /tmp/transformer_encoder.trt")
+
+
+
+
+    decoder_path = "/tmp/transformer_decoder.trt"
+    print(f"Downloading ONNX model from https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.trt")
+    r = requests.get("https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformer_decoder.trt")
+    with open(decoder_path, "wb") as f:
+        f.write(r.content)
+    print(f"✅ Saved ONNX to /tmp/transformer_decoder.trt")
+
+
+
     # Trt
-    ocr_model = TrtOCR('transformer_encoder.trt', 'transformer_decoder.trt', config)
+    ocr_model = TrtOCR(encoder_path, decoder_path, config)
     print(ocr_model.predict_batch([img1, img2, img3]))
     # tik = time.time()
     # for i in range(100):
