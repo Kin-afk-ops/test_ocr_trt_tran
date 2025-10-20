@@ -26,26 +26,10 @@ class TorchEncoder(nn.Module):
         # memories = self.model.transformer.forward_encoder(src)
         return memory
 
-config = Cfg.load_config_from_name('vgg_transformer')
-dataset_params = {
-    'name':'hw',
-    'data_root':'./my_data/',
-    'train_annotation':'train_line_annotation.txt',
-    'valid_annotation':'test_line_annotation.txt'
-}
+config = Cfg.load_config_from_file("./tran_config_14_10_2025.yml")
 
-params = {
-         'print_every':200,
-         'valid_every':15*200,
-          'iters':20000,
-          'checkpoint':'./checkpoint/transformerocr_checkpoint.pth',    
-          'export':'./weights/transformerocr.pth',
-          'metrics': 10000
-         }
-
-config['trainer'].update(params)
-config['dataset'].update(dataset_params)
-config['device'] = 'cpu'
+config['weights'] = "https://r2-storage.teknix.services/models/vietocr/modal_ocr/onnx/tran/new/transformerocr_14_10_2025_final.pth"
+config['device'] = 'cuda:0'
 
 trainer = Predictor(config)
 
