@@ -173,7 +173,18 @@ class TrtOCREncoder(TrtModel):
         feats = do_inference(
             self.context, bindings=self.bindings,
             inputs=self.inputs, outputs=self.outputs, stream=self.stream)
-        return feats[0][:np.prod(out_shape)].reshape(out_shape)
+        output =  feats[0][:np.prod(out_shape)].reshape(out_shape)
+         
+        # DEBUG: Check output
+        print(f"[TRT Encoder Debug]")
+        print(f"  Input shape: {input.shape}")
+        print(f"  Output shape: {output.shape}")
+        print(f"  Output min/max: {output.min()}/{output.max()}")
+        print(f"  Output sample (first 5): {output.flatten()[:5]}")
+        print(f"  Output has NaN: {np.isnan(output).any()}")
+        print(f"  Output has Inf: {np.isinf(output).any()}")
+        
+        return output
 
 class TrtOCRDecoder(TrtModel):
     def __init__(self, model):

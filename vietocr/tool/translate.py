@@ -120,6 +120,8 @@ def translate(img, model, max_seq_length=128, sos_token=1, eos_token=2):
     
     return translated_sentence, char_probs
 
+
+
 def translate_trt(img, encoder_model, decoder_model, max_seq_length=128, sos_token=1, eos_token=2):
 
     memory = encoder_model.run(img)
